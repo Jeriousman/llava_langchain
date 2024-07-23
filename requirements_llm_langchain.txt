@@ -1,6 +1,3 @@
-# transformers
-# bitsandbytes
-# accelerate
 pillow
 python-dotenv
 gradio
