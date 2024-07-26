@@ -25,8 +25,7 @@ RUN pip3 install --no-cache-dir -Iv tqdm
 RUN pip3 install -r /workspace/requirements_llm_langchain.txt
 
 
-ENV LANGCHAIN_API_KEY=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 \
-    OPENAI_API_KEY=sk-proj-H6lBFUuqY8c9BKH3jwp5T3BlbkFJdsOWOeX8VKt4wi2W4b1h
+
 
 
 
