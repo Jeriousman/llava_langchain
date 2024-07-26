@@ -3,6 +3,8 @@ Reference:
 https://medium.com/@shivansh.kaushik/implementing-large-multimodal-models-lmm-in-few-lines-of-code-using-langchain-and-ollama-6c08b1c25fdd
 https://python.langchain.com/v0.2/docs/integrations/llms/ollama/
 '''
+
+
 from langchain_core.prompts import ChatPromptTemplate
 import os
 # from dotenv import load_dotenv
@@ -19,6 +21,19 @@ from langchain.vectorstores import Chroma
 from langchain_experimental.open_clip import OpenCLIPEmbeddings
 from langchain_community.llms import Ollama
 from langchain.chains import create_retrieval_chain
+# from langchain.prompts import PromptTemplate, ChatPromptTemplate
+from langchain.prompts import (
+    ChatPromptTemplate,
+    PromptTemplate,
+    SystemMessagePromptTemplate,
+    AIMessagePromptTemplate,
+    HumanMessagePromptTemplate,
+)
+from langchain.schema import (
+    AIMessage,
+    HumanMessage,
+    SystemMessage
+)
 
 ##Gradio
 os.environ["OPENAI_API_KEY"]=os.getenv("OPENAI_API_KEY")
@@ -75,24 +90,87 @@ def take_inputs_then_answer(img, prompt:str):
     return response
 
 
+# prompt = PromptTemplate.from_template("tell me a joke about {subject}")
 
+# template = """
+# 너는 요리사야. 내가 가진 재료들을 갖고 만들 수 있는 요리를 추천하고, 그 요리의 레시피를 제시해줘.
+# 내가 가진 재료는 아래와 같아.
+
+# <재료>
+# {재료}
+
+# """
+
+
+# #ChatGPT에게 역할을 부여합니다.(위에서 정의한 Template 사용)
+# system_message_prompt = SystemMessagePromptTemplate.from_template(template)
+
+# #사용자가 입력할 매개변수 template을 선언합니다.
+# human_template = "{재료}"
+# human_message_prompt = HumanMessagePromptTemplate.from_template(human_template)
+
+# #ChatPromptTemplate에 system message와 human message 템플릿을 삽입합니다.
+# chat_prompt = ChatPromptTemplate.from_messages([system_message_prompt, human_message_prompt])
+
+# #ChatGPT API에 ChatPromptTemplate을 입력할 때, human message의 매개변수인 '재료'를 할당하여 전달합니다.
+# #이와 같은 방식을 통해 ChatGPT는 ChatPromptTemplate의 구성요소인 system message와 human message를 전달받아, 대답 생성에 활용합니다.
+# answer = mllm(chat_prompt.format_prompt(재료="양파, 계란, 사과, 빵").to_messages())
+# print(answer.content)
+
+
+# prompt = '''
+# You are an expert that checks if photos are really natural with real-world notions. 
+# For example, people in photos cannot have more than 5 fingers because people only have 5 fingers in real-world.
+# \n\n
+# Is this photo realistic in real-world situation?
+# '''
+
+
+# prompt = '''
+# You are a helpful assistant that helps me detect if provided photos are real or fake photos. 
+# I want you to tell me 'real photo' even if the photo is digitally manipulated or generated in case the photo is natural and realistic. 
+# Here are some fake photo examples.
+# 1. There are people who have not 5 fingers.
+# 2. There are people who have unnatural parts in their bodies.
+# 3. There are people who have unusual artifacts in the photos.
+# \n\n
+# Is this photo a real photo? If it is not a real photo, can you tell me the reasons in detail?
+# '''
+
+
+# prompt1 = "Is the photo life-like natural? Is there any pixels with unnatural artifacts?"
 
 if __name__=='__main__':
     gradio_demo = gr.Interface(fn=take_inputs_then_answer, 
-                               inputs=[gr.Image(type="filepath"), gr.Textbox("Is the photo life-like natural? Is there any pixels with unnatural artifacts?")], 
+                               inputs=[gr.Image(type="filepath"), gr.Textbox('''
+You are a helpful assistant that helps me detect if provided photos are real or fake photos. 
+I want you to tell me 'real photo' even if the photo is digitally manipulated or generated in case the photo is natural and realistic. 
+Here are some fake photo examples.
+1. There are people who have not 5 fingers.
+2. There are people who have unnatural parts in their bodies.
+3. There are people who have unusual artifacts in the photos.
+\n\n
+Is this photo a real photo? If it is not a real photo, can you tell me the reasons in detail?
+''')], 
                                outputs='text',
                                title="LLaVA Image Checker Boom",
                                description="Please write prompt carefully for the MLLM model to work best")
     gradio_demo.launch(share=True)
 
+## https://www.youtube.com/watch?v=tIU2tw3PMUE&list=PLQIgLu3Wf-q_Ne8vv-ZXuJ4mztHJaQb_v&index=5
+## 1. document loaders
 
+## 2. text splitters
+
+## 3. vector embedding models
+
+## 4. create vector store
+
+## 5. retrieve relevant documents in vector store by retriever
 
 ## Create vector store and retain it
 
-
 ## Create MLLM prompt
-
-
 
 ## Create chain with MLLM prompt!
 

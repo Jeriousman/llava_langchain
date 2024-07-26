@@ -7,7 +7,6 @@ gradio
 # torchvision==0.16.0
 # --index-url https://download.pytorch.org/whl/cu118
 # torchaudio==2.1.0
-
 langchain
 openai
 chromadb

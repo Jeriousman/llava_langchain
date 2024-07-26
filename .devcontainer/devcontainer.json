@@ -1,0 +1,38 @@
+{
+	"name": "llava",
+	"build": {
+		"dockerfile": "../tmp/Dockerfile",
+		"context": ".."
+	},
+	// "image":"imagechecker:0.2",
+	// "forwardPorts": [8888],
+	"runArgs": [
+		// GPU 사용을 위한 옵션(nvidia 관련 설정 필요)
+		"--gpus",
+		"\"device=0,1\"",
+		// 컨테이너의 이름을 짓는 옵션
+		"--name",
+		"llava",
+		// "-v",
+		// "/home/hojun/projects/llm/llava-rag/:/workspace/llava",
+		// 사용자가 멈추지 않았는데 꺼진 경우 다시 켜주는 옵션
+		"--restart=unless-stopped"
+	],
+	// volumn mount를 위해 사용하는 옵션
+	// ${localWorkspaceFolder}의 경우 $(pwd)와 같은 의미
+	"workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind",
+	// 컨테이너 내 WORKDIR 설정 해주는 옵션
+	"workspaceFolder": "/workspace",
+	"customizations": {
+		"vscode": {
+			"settings": {
+				"terminal.integrated.defaultProfile.linux": "bash"
+			},
+			// VSCode Extension을 Docker Container에 자동으로 깔아주는 옵션
+			"extensions": [
+				"ms-python.python",
+				"ms-toolsai.jupyter"
+			]
+		}
+	}
+}
